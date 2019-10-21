@@ -17,7 +17,6 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.proxy.Proxy;
@@ -42,13 +41,16 @@ public abstract class CrawlerWorker implements GlueHandler {
     public Logger logger = LoggerFactory.getLogger(CrawlerWorker.class);
     public ThreadLocal<Map<String, Object>> params = new ThreadLocal<>();
     public ThreadLocal<Integer> reTryCountD = new ThreadLocal<>();//详情页重试次数
+    //    @Autowired
+//每次从任务中心拿到的任务
+//public Map<String, Object> params;
+//////////main方法执行不管用//////////////
+//    @Autowired
+    public DuplicateKeyDao duplicateKeyDao = new DuplicateKeyDao();
     public ThreadLocal<Integer> reTryCountL = new ThreadLocal<>();//列表页重试次数
-    //每次从任务中心拿到的任务
-    //public Map<String, Object> params;
-    @Autowired
-    public DuplicateKeyDao duplicateKeyDao;
-    @Autowired
-    public McnTaskDao mcnTaskDao;
+    //    @Autowired
+    public McnTaskDao mcnTaskDao = new McnTaskDao();
+    //////////main方法执行不管用//////////////
     private Configuration configuration = Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
     //只打日志用,子类貌似用不到
     private String origin = "";
