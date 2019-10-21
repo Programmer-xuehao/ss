@@ -84,11 +84,11 @@ public class Bilibili_weMedia_Script extends CrawlerWorker {
             String aid = context.read("$.aid") + "";
 
             String duplicateKey = CommonUtils.md5IdUrl("https://www.bilibili.com/video/av" + aid);
-            //本地main方法测试时需要注掉
+            //手动判断重复，放在请求前面，避免发生多余的请求
             //重复为true
-//            if (duplicateKeyDao.containsKey(duplicateKey)) {
-//                return null;//重复key,取消抓取
-//            }
+            if (duplicateKeyDao.containsKey(duplicateKey)) {
+                return null;//重复key,取消抓取
+            }
 
             contentBo.setDuplicateKey(duplicateKey);
             contentBo.setShapeType("2");
@@ -108,11 +108,11 @@ public class Bilibili_weMedia_Script extends CrawlerWorker {
             String id = context.read("$.id") + "";
 
             String duplicateKey = CommonUtils.md5IdUrl("https://www.bilibili.com/read/cv" + id);
-            //本地main方法测试时需要注掉
+            //手动判断重复，放在请求前面，避免发生多余的请求
             //重复为true
-//            if (duplicateKeyDao.containsKey(duplicateKey)) {
-//                return null;//重复key,取消抓取
-//            }
+            if (duplicateKeyDao.containsKey(duplicateKey)) {
+                return null;//重复key,取消抓取
+            }
 
             contentBo.setShapeType("1");//1 文章  2 视频  3 ALL
             contentBo.setTitle(context.read("$.title") + "");
