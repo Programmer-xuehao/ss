@@ -1,4 +1,4 @@
-package com.ifeng.mcn.spider.test.develop;
+package com.ifeng.mcn.spider.test.develop.prod;
 
 import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
 import cn.edu.hfut.dmic.contentextractor.News;

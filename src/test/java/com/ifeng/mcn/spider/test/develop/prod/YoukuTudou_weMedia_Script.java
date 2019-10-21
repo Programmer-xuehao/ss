@@ -1,4 +1,4 @@
-package com.ifeng.mcn.spider.test.develop;
+package com.ifeng.mcn.spider.test.develop.prod;
 
 import com.ifeng.mcn.common.utils.CommonUtils;
 import com.ifeng.mcn.data.api.bo.McnContentBo;

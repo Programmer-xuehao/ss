@@ -1,6 +1,5 @@
-package com.ifeng.mcn.spider.test.develop;
+package com.ifeng.mcn.spider.test.develop.example;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.ifeng.mcn.common.utils.CommonUtils;
 import com.ifeng.mcn.data.api.bo.McnContentBo;
@@ -16,17 +15,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 示例抓取任务脚本-爱奇艺
+ * 示例脚本-爱奇艺
  * 不需要代理
  * 不需要解析视频地址
+ *
  * @author ZFang
  */
 public class Iqiyi_weMedia_Script extends CrawlerWorker {
 
     public static void main(String[] args) throws Exception {
-        Iqiyi_weMedia_Script douyin_weMedia_script = new Iqiyi_weMedia_Script();
         Map map = Maps.newHashMap();
-        douyin_weMedia_script.params.set(map);
         map.put("link", "http://www.iqiyi.com/u/1479459391/v");
         map.put("mcnTaskId", "test001");
         map.put("taskType", "douyin_weMedia");
@@ -34,11 +32,22 @@ public class Iqiyi_weMedia_Script extends CrawlerWorker {
         map.put("riskKeyPrefix", "douyin_http");
         map.put("mediaId", "64269185197");
         map.put("mediaName", "中国日报");
-        System.out.println(JSON.toJSON(map));
+
+        Iqiyi_weMedia_Script douyin_weMedia_script = new Iqiyi_weMedia_Script();
+        douyin_weMedia_script.params.set(map);
         List<String> result = douyin_weMedia_script.crawlerListPage(map);
-        System.out.println(JSON.toJSON(result));
+        for (String item : result) {
+            douyin_weMedia_script.crawlerDetailPage(item, map);
+        }
     }
 
+    /**
+     * 返回一段HTML
+     *
+     * @param params
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<String> crawlerListPage(Map<String, Object> params) throws Exception {
         String crawlerUrl = params.get("link").toString();
@@ -64,12 +73,7 @@ public class Iqiyi_weMedia_Script extends CrawlerWorker {
         String tvid = a.attr("data-tvid");
 
         //判重
-        String duplicateKey = params.get("taskType") + tvid;
-        duplicateKey = CommonUtils.md5IdUrl(duplicateKey);
-        //重复为true
-        if (duplicateKeyDao.containsKey(duplicateKey)) {
-            return null;
-        }
+        String duplicateKey = CommonUtils.md5IdUrl(params.get("taskType") + tvid);
 
         String tl = r.select("span.playTimes_status.tl").text();
 

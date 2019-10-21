@@ -1,4 +1,4 @@
-package com.ifeng.mcn.spider.test.develop;
+package com.ifeng.mcn.spider.test.develop.prod;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

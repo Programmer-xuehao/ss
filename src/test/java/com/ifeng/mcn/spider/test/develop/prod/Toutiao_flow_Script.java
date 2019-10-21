@@ -1,4 +1,4 @@
-package com.ifeng.mcn.spider.test.develop;
+package com.ifeng.mcn.spider.test.develop.prod;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -10,9 +10,7 @@ import com.ifeng.mcn.common.utils.CommonUtils;
 import com.ifeng.mcn.data.api.bo.McnContentBo;
 import com.ifeng.mcn.spider.script.CrawlerWorker;
 import com.ifeng.mcn.spider.utils.MySpider;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 
