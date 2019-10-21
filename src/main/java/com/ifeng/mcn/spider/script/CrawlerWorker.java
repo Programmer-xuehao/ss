@@ -102,6 +102,11 @@ public abstract class CrawlerWorker implements GlueHandler {
                 try {
                     McnContentBo contentBo = crawlerDetailPage(url, params);
                     if (contentBo != null) {
+                        //统一去重处理
+                        //重复为true
+                        if (duplicateKeyDao.containsKey(contentBo.getDuplicateKey())) {
+                            break;
+                        }
                         detailSuccessCount += 1;
                         contentBoList.add(contentBo);
 //                        logSpiderEvent(params, startTime, null, EventType.detail);
