@@ -12,7 +12,8 @@ public enum ContentType {
     //shape//1 文章  2 视频  3 ALL
     ARTICLE("1"),
     VIDEO("2"),
-    ALL("3") ;
+    GALLARY("3"),
+    ALL("4") ;
     private String  code  ;
 
     ContentType(String type){
