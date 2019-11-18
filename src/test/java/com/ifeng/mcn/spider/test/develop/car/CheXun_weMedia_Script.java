@@ -78,7 +78,7 @@ public class CheXun_weMedia_Script extends CrawlerWorker {
             String time = context.read("$.createTime").toString().split("T")[0] + " " + context.read("$.createTime").toString().split("T")[1].split(".000")[0];
             Long publishTime = df.parse(time).getTime();
             String aid = context.read("$.id") + "";
-            String duplicateKey = CommonUtils.md5IdUrl("url" + "");
+            String duplicateKey = CommonUtils.md5IdUrl(aid+params.get("mediaId"));
             //手动判断重复，放在请求前面，避免发生多余的请求
             //重复为true
 
@@ -104,7 +104,7 @@ public class CheXun_weMedia_Script extends CrawlerWorker {
             //https://api.bilibili.com/x/space/article?mid=30019305&pn=1&ps=12&sort=publish_time&jsonp=jsonp
             //文章解析
             String aid = context.read("$.id") + "";
-            String duplicateKey = CommonUtils.md5IdUrl("url" + "");
+            String duplicateKey = CommonUtils.md5IdUrl(aid+params.get("mediaId"));
             //手动判断重复，放在请求前面，避免发生多余的请求
             //重复为true
             if (duplicateKeyDao.containsKey(duplicateKey)) {
