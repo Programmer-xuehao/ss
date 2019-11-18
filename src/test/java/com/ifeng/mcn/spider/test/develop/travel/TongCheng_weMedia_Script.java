@@ -77,6 +77,9 @@ public class TongCheng_weMedia_Script extends CrawlerWorker {
         Long pushTime = df.parse(time).getTime();
         //判重
         String duplicateKey = CommonUtils.md5IdUrl(params.get("taskType") + url);
+        if (duplicateKeyDao.containsKey(duplicateKey)) {
+            return null;//重复key,取消抓取
+        }
         McnContentBo contentBo = new McnContentBo();
         contentBo.setPublishTime(pushTime);
         contentBo.setContent(content);

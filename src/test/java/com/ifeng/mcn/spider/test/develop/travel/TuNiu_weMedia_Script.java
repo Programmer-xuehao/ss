@@ -84,7 +84,7 @@ public class TuNiu_weMedia_Script extends CrawlerWorker {
             contentBo.setCover(context.read("$.commonModule.coverImageUrl") + "");
             contentBo.setAbstractInfo(context.read("$.commonModule.description") + "");
             contentBo.setTitle(context.read("$.commonModule.title") + "");
-            String duplicateKey = CommonUtils.md5IdUrl("https://www.bilibili.com/video/av" + aid);
+            String duplicateKey = CommonUtils.md5IdUrl(url + aid);
             //手动判断重复，放在请求前面，避免发生多余的请求
             //重复为true
             if (duplicateKeyDao.containsKey(duplicateKey)) {
@@ -112,7 +112,7 @@ public class TuNiu_weMedia_Script extends CrawlerWorker {
             contentBo.setAbstractInfo("$.commonModule.description");
             contentBo.setTitle(context.read("$.commonModule.title") + "");
             contentBo.setMusicDownloadUrl(sourceLink);
-            String duplicateKey = CommonUtils.md5IdUrl("https://www.bilibili.com/video/av" + aid);
+            String duplicateKey = CommonUtils.md5IdUrl(url + aid);
             if (duplicateKeyDao.containsKey(duplicateKey)) {
                 return null;//重复key,取消抓取
             }

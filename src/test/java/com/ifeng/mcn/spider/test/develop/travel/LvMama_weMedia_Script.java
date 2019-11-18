@@ -42,8 +42,6 @@ public class LvMama_weMedia_Script extends CrawlerWorker {
         map.put("taskType", " LvMama_weMedia");
         map.put("crawlerType", "http");
         map.put("riskKeyPrefix", " LvMama_http");
-
-
         LvMama_weMedia_Script douyin_weMedia_script = new LvMama_weMedia_Script();
         douyin_weMedia_script.params.set(map);
         List<String> result = douyin_weMedia_script.crawlerListPage(map);
@@ -90,8 +88,10 @@ public class LvMama_weMedia_Script extends CrawlerWorker {
         String oriContent = document.select("div.ebm-post").get(0).toString();
         //判重
         String duplicateKey = CommonUtils.md5IdUrl(params.get("taskType") + tvid);
+        if (duplicateKeyDao.containsKey(duplicateKey)) {
+            return null;//重复key,取消抓取
+        }
         Long pushTime = df.parse(Time).getTime();
-
         McnContentBo contentBo = new McnContentBo();
         contentBo.setPlatId(tvid);
         contentBo.setMediaId(params.get("mediaId") + "");
@@ -105,10 +105,7 @@ public class LvMama_weMedia_Script extends CrawlerWorker {
         contentBo.setContent(oriContent);
         contentBo.setCover(localCoverPic);
         contentBo.setAbstractInfo(abstracts);
-        contentBo.setDuplicateKey(duplicateKey);
-
-
-        //按时间过滤
+         //按时间过滤
         if (exceedPubTime(pushTime)) {
             return null;
         }

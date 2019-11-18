@@ -83,6 +83,9 @@ public class QuNar_weMedia_Script extends CrawlerWorker {
             Long pushTime = df.parse(time).getTime();
             //判重
             String duplicateKey = CommonUtils.md5IdUrl(params.get("taskType") + tvid);
+            if (duplicateKeyDao.containsKey(duplicateKey)) {
+                return null;//重复key,取消抓取
+            }
             Calendar instance = Calendar.getInstance();
             McnContentBo contentBo = new McnContentBo();
             contentBo.setPlatId(tvid);

@@ -72,12 +72,14 @@ public class WangTongShe_weMedia_Script extends CrawlerWorker {
         String title = r.select("div.ina_dongtai_bt>h3>a").text();
         String abstracts = r.select("a").get(2).text();
         String time = document.select("p>span.ina_data").text() + ":00";
-        Integer commentCount = Integer.valueOf(document.select("div.ina_plbt").attr("data-counts"));
         String localCoverPic = "http:" + r.select("dt>a>img").attr("data-original");
         String oriContent = document.select("div.ina_content").toString();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Long pushTime = df.parse(time).getTime();
         String duplicateKey = CommonUtils.md5IdUrl(params.get("taskType") + tvid);
+        if (duplicateKeyDao.containsKey(duplicateKey)) {
+            return null;//重复key,取消抓取
+        }
         McnContentBo contentBo = new McnContentBo();
         contentBo.setPlatId(tvid);
         contentBo.setTitle(title);

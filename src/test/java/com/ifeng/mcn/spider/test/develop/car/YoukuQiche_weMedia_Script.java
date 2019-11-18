@@ -74,6 +74,9 @@ public class YoukuQiche_weMedia_Script extends CrawlerWorker {
         String publishTime = document.select("meta").get(21).attr("content");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String duplicateKey = CommonUtils.md5IdUrl(params.get("taskType") + url);
+        if (duplicateKeyDao.containsKey(duplicateKey)) {
+            return null;//重复key,取消抓取
+        }
         String AbstractInfo = document.toString().split("视频内容简介:")[1].split("\">")[0];
         String title = r.selectFirst("a").attr("title");
         String tvid = url.split("id_")[1].split("==")[0];
