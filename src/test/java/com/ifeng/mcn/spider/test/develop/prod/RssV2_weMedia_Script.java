@@ -1,4 +1,4 @@
-package com.ifeng.mcn.spider.test.develop.prod;
+package com.ifeng.mcn.spider.test.develop;
 
 import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
 import cn.edu.hfut.dmic.contentextractor.News;
@@ -29,6 +29,11 @@ import java.util.*;
 /**
  * 迁移脚本-RSS
  * 不需要代理
+ * <p>
+ * RSS脚本务必每次从ide复制粘贴到后台保存
+ * RSS脚本务必每次从ide复制粘贴到后台保存
+ * RSS脚本务必每次从ide复制粘贴到后台保存
+ * RSS脚本务必每次从ide复制粘贴到后台保存
  *
  * @author ZFang
  */
@@ -78,6 +83,8 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
             McnContentBo mcnContentBo = script.crawlerDetailPage(item, params);
             System.err.println(JSON.toJSONString(mcnContentBo));
         }
+
+//        script.uploadAndRefresh();
 
     }
 
@@ -188,15 +195,15 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
                     link.add(node.asXML());
                 }
             } catch (DocumentException e) {
-                if (params.get("link").toString().contains("www.investorchina.cn/console/rss")){
+                if (params.get("link").toString().contains("www.investorchina.cn/console/rss")) {
                     Document document = Jsoup.parse(body, "", Parser.xmlParser());
                     Elements items = document.select("rss channel item");
                     for (Element item : items) {
                         link.add(item.toString());
                     }
                     return link;
-                }else {
-                    logger.error("RSS 转为dom4j Document时出错",e);
+                } else {
+                    logger.error("RSS 转为dom4j Document时出错", e);
                     throw e;
                 }
             }
@@ -361,6 +368,36 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
         //没解析到时间就按当前时间
         if (contentBo.getPublishTime() == null || contentBo.getPublishTime() <= 0) {
             contentBo.setPublishTime(System.currentTimeMillis());
+        }
+        //需要走自动提取的链接
+        ArrayList<String> autoCrawlerList = new ArrayList<>();
+        autoCrawlerList.add("http://www.gs090.com/index.php?m=content&c=rss&rssid=49");
+        autoCrawlerList.add("http://www.zui.ms/feed");
+        autoCrawlerList.add("http://www.rmzs.net/rss.php");
+        autoCrawlerList.add("http://www.kfarts.com/rss.php");
+        autoCrawlerList.add("http://www.otcbeta.com/portal.php?mod=rss&catid=14");
+        autoCrawlerList.add("http://www.dingbian.net/e/web/?");
+        autoCrawlerList.add("https://www.fenxiangbe.com/feed");
+        autoCrawlerList.add("https://hezibuluo.com/feed");
+        autoCrawlerList.add("http://i.smartshe.com/feed/rss.php?mid=21&catid=5");
+        autoCrawlerList.add("https://www.rugaow.cc/forum.php?mod=rss&fid=2");
+        autoCrawlerList.add("https://www.ntcda.com/feed");
+        autoCrawlerList.add("http://app.chinaz.com/RssHandler.ashx");
+        autoCrawlerList.add("http://www.jfinfo.com/feed");
+        autoCrawlerList.add("https://www.ruodian360.com/feed");
+        autoCrawlerList.add("http://e.jznews.com.cn/GetData/BBSData.asmx/GetRSSData");
+        autoCrawlerList.add("https://www.arcticray.com/e/web/?type=rss2&order=0&orderby=0&classid=2");
+        autoCrawlerList.add("http://www.mhn24.com/feed");
+        autoCrawlerList.add("https://getitfree.cn/feed/");
+        autoCrawlerList.add("http://www.epx365.cn/rss.php");
+        autoCrawlerList.add("http://www.dflit.com/newmedia/index.php?s=/Admin/Public/getdafrss/id/23");
+        autoCrawlerList.add("http://app.bbtnews.com.cn/?app=rss&controller=index&action=feed&catid=260");
+        autoCrawlerList.add("http://www.sydw.cc/portal.php?mod=rss&auth=0");
+        autoCrawlerList.add("http://www.yuleq.com.cn/index.php?m=content&c=rss&rssid=6");
+        autoCrawlerList.add("http://www.gl35w.com/feed/rss.php?mid=14");
+
+        if (autoCrawlerList.contains(params.get("link"))) {
+            autoCrawlerContent(contentBo, link);
         }
 
         //======自动抽取判断=======//
