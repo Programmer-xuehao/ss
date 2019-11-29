@@ -1,4 +1,4 @@
-package com.ifeng.mcn.spider.test.develop;
+package com.ifeng.mcn.spider.test.develop.prod;
 
 import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
 import cn.edu.hfut.dmic.contentextractor.News;
@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,6 +24,9 @@ import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -70,6 +74,8 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
         params.put("link", "http://www.dsynews.cn/e/web/?type=rss2&order=0&orderby=0&classid=8|http://www.dsynews.cn/e/web/?type=rss2&order=0&orderby=0&classid=0\t");
         params.put("link", "http://rss.leju.com/rss/show/index?id=62");
         params.put("link", "http://www.investorchina.cn/console/rss/swcj/list2.xml");
+        params.put("link", "http://rss.jingjiribao.cn/feed2");
+//        params.put("link", "http://www.dsynews.cn/e/web/?type=rss2&order=0&orderby=0&classid=1");
         params.put("mcnTaskId", "test001");
         params.put("taskType", "rss_weMedia");
         params.put("crawlerType", "http");
@@ -189,7 +195,9 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
             logger.info("taskid:{}，detail：{}",(String)params.get("mcnTaskId"),run.getRawText());*/
 
         try {
-            String body = http(params.get("link") + "").timeout(8000).get().toString();
+            Connection.Response response = http(params.get("link") + "").timeout(8000).execute();
+            ByteBuffer byteBuffer = ByteBuffer.wrap(response.bodyAsBytes());
+            String body = Charset.forName(response.parse().charset().name()).decode(byteBuffer).toString();
             try {
                 for (Node node : DocumentHelper.parseText(body).selectNodes("//rss/channel/item")) {
                     link.add(node.asXML());
@@ -225,6 +233,7 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
         } catch (Exception e) {
             logger.error("rss crawler list Err:{}", params, e);
         }
+
 
         return link;
     }
@@ -438,7 +447,9 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
      */
     public void autoCrawlerContent(McnContentBo contentBo, String link) {
         try {
-            String body = http(link).get().html();
+            Connection.Response response = http(link).timeout(8000).execute();
+            ByteBuffer byteBuffer = ByteBuffer.wrap(response.bodyAsBytes());
+            String body = Charset.forName(response.parse().charset().name()).decode(byteBuffer).toString();
             News contentByHtml = ContentExtractor.getNewsByHtml(body);
             contentBo.setContent(contentByHtml.getContentElement().toString());
         } catch (Exception e) {
