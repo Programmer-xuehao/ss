@@ -1,4 +1,4 @@
-package com.ifeng.mcn.spider.test.develop.prod;
+package com.ifeng.mcn.spider.test.develop;
 
 import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
 import cn.edu.hfut.dmic.contentextractor.News;
@@ -25,7 +25,6 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -75,7 +74,37 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
         params.put("link", "http://rss.leju.com/rss/show/index?id=62");
         params.put("link", "http://www.investorchina.cn/console/rss/swcj/list2.xml");
         params.put("link", "http://rss.jingjiribao.cn/feed2");
-//        params.put("link", "http://www.dsynews.cn/e/web/?type=rss2&order=0&orderby=0&classid=1");
+        params.put("link", "http://www.dsynews.cn/e/web/?type=rss2&order=0&orderby=0&classid=1");
+        params.put("link", "https://3w.huanqiu.com/rss?agt=86");
+        params.put("link", "http://bdbj.firefang.cn/tiexuexml/jujiaoarticles.xml");
+        params.put("link", "http://app.ikanchai.com/?app=rss&controller=index&action=feed&catid=2");
+        params.put("link", "http://www.epx365.cn/rss.php");
+        params.put("link", "https://rss.qianzhan.com/xml/tt_dafenghao.xml");
+        params.put("link", "http://3g.sdchina.com/sinarss/news.xml");
+        params.put("link", "http://www.wabei.cn/yc/dafenghao.xml");
+        params.put("link", "http://www.yulefm.com/e/rss/baijiahao.php");
+        params.put("link", "https://rss.dbw.cn/dfrss.xml");
+        params.put("link", "http://wx.youchengdu.net/rss/dfhxml?key=ycdxml2019&page=1");
+        params.put("link", "https://api.ithome.com/rss/dafeng");
+        params.put("link", "http://open.chuangyejia.vip/rss/dafeng");
+        params.put("link", "http://service.qiuzhang.com/controllers/thirdpartyapi/articlerss.ashx?type=ifeng");
+        params.put("link", "http://www.chinafashionblog.com/feed.php");
+        params.put("link", "http://product.kimiss.com/xml/fhh_ifeng/data.xml");
+        params.put("link", "http://xch3.com/Resource/RssFile/Xch3RSSFile.xml");
+        params.put("link", "http://jinbiao.hljnews.cn:4401/html/rss/rss.xml");
+        params.put("link", "http://www.12365auto.com/RSS/AllNews.xml");
+        params.put("link", "http://bdbj.firefang.cn/tiexuexml/jujiaoarticles.xml");
+        params.put("link", "http://www.epx365.cn/rss.php");
+        params.put("link", "https://www.zgceo.cn/sitemap.xml");
+        params.put("link", "http://www.thecover.cn/getOriginalRssForToutiao");
+        params.put("link", "https://www.zgceo.cn/sitemap.xml");
+        params.put("link", "http://www.cb.com.cn/rss/rss.xml");
+        params.put("link", "https://36kr.com/feed");
+        params.put("link", "http://rss.eastmoney.com/finance_cdjbd.xml");
+        params.put("link", "https://rss.qianzhan.com/xml/tt_dafenghao.xml");
+        params.put("link", "http://3g.sdchina.com/sinarss/news.xml");
+        params.put("link", "https://rss.dbw.cn/dfrss.xml");
+        params.put("link", "http://www.shenzhenware.com/articles/feed?format=rss");
         params.put("mcnTaskId", "test001");
         params.put("taskType", "rss_weMedia");
         params.put("crawlerType", "http");
@@ -195,7 +224,7 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
             logger.info("taskid:{}，detail：{}",(String)params.get("mcnTaskId"),run.getRawText());*/
 
         try {
-            Connection.Response response = http(params.get("link") + "").timeout(8000).execute();
+            Connection.Response response = http(params.get("link") + "", null).timeout(8000).execute();
             ByteBuffer byteBuffer = ByteBuffer.wrap(response.bodyAsBytes());
             String body = Charset.forName(response.parse().charset().name()).decode(byteBuffer).toString();
             try {
@@ -203,7 +232,33 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
                     link.add(node.asXML());
                 }
             } catch (DocumentException e) {
-                if (params.get("link").toString().contains("www.investorchina.cn/console/rss")) {
+                //解析异常需要走Jsoup解析
+                ArrayList<Object> listJsoup = new ArrayList<>();
+                listJsoup.add("http://bdbj.firefang.cn/tiexuexml/jujiaoarticles.xml");
+                listJsoup.add("http://app.ikanchai.com/?app=rss&controller=index&action=feed&catid=1");
+                listJsoup.add("http://app.ikanchai.com/?app=rss&controller=index&action=feed&catid=2");
+                listJsoup.add("http://www.epx365.cn/rss.php");
+                listJsoup.add("https://www.zgceo.cn/sitemap.xml");
+                listJsoup.add("http://www.thecover.cn/getOriginalRssForToutiao");
+                listJsoup.add("https://36kr.com/feed");
+                listJsoup.add("http://www.cb.com.cn/rss/rss.xml");
+                listJsoup.add("http://rss.eastmoney.com/finance_cdjbd.xml");
+                listJsoup.add("https://rss.qianzhan.com/xml/tt_dafenghao.xml");
+                listJsoup.add("http://3g.sdchina.com/sinarss/news.xml");
+                listJsoup.add("http://www.wabei.cn/yc/dafenghao.xml");
+                listJsoup.add("http://www.yulefm.com/e/rss/baijiahao.php");
+                listJsoup.add("https://rss.dbw.cn/dfrss.xml");
+                listJsoup.add("http://wx.youchengdu.net/rss/dfhxml?key=ycdxml2019&page=1");
+                listJsoup.add("https://api.ithome.com/rss/dafeng");
+                listJsoup.add("http://open.chuangyejia.vip/rss/dafeng");
+                listJsoup.add("http://service.qiuzhang.com/controllers/thirdpartyapi/articlerss.ashx?type=ifeng");
+                listJsoup.add("http://www.chinafashionblog.com/feed.php");
+                listJsoup.add("http://product.kimiss.com/xml/fhh_ifeng/data.xml");
+                listJsoup.add("http://xch3.com/Resource/RssFile/Xch3RSSFile.xml");
+                listJsoup.add("http://jinbiao.hljnews.cn:4401/html/rss/rss.xml");
+                listJsoup.add("http://www.12365auto.com/RSS/AllNews.xml");
+                listJsoup.add("http://www.pcauto.com.cn/3g/hz/1607/intf9183.xml");
+                if (listJsoup.contains(params.get("link"))) {
                     Document document = Jsoup.parse(body, "", Parser.xmlParser());
                     Elements items = document.select("rss channel item");
                     for (Element item : items) {
@@ -211,7 +266,7 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
                     }
                     return link;
                 } else {
-                    logger.error("RSS 转为dom4j Document时出错", e);
+                    logger.error("RSS 转为dom4j Document时出错 url={}", params.get("link"), e);
                     throw e;
                 }
             }
@@ -404,6 +459,7 @@ public class RssV2_weMedia_Script extends CrawlerWorker {
         autoCrawlerList.add("http://www.sydw.cc/portal.php?mod=rss&auth=0");
         autoCrawlerList.add("http://www.yuleq.com.cn/index.php?m=content&c=rss&rssid=6");
         autoCrawlerList.add("http://www.gl35w.com/feed/rss.php?mid=14");
+        autoCrawlerList.add("https://3w.huanqiu.com/rss?agt=86");
 
         if (autoCrawlerList.contains(params.get("link"))) {
             autoCrawlerContent(contentBo, link);
